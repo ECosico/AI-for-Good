@@ -22,9 +22,13 @@ def prior_prob(table, target, target_value):
   p_a = sum([1 if v==target_value else 0 for v in t_list])/len(t_list)
   return p_a
 
-for row in last10_rows:
-  actual = row[-1]
-  row = row[:-1]
-  probabilities = naive_bayes(shelter_table, row, target)
-  prediction = 1 if probabilities[1]>=.5 else 0
-  print(f'Actual: {actual}, Prediction: {prediction},  Probabilities: {probabilities}')
+def naive_bayes(table, evidence_row, target):
+  #compute P(target=0|...) by using cond_probs_product, take the product of the list, finally multiply by P(target=0) using prob_cond on that
+  neg = cond_probs_product(table, evidence_row, target, 0) * prior_prob(table, target, 0)
+  #do same for P(target=1|...)
+  pos = cond_probs_product(table, evidence_row, target, 1)* prior_prob(table, target, 1)
+
+  #Use compute_probs to get 2 probabilities
+  compute_probs(neg,pos)
+  #return your 2 results in a list
+  return compute_probs(neg,pos)
