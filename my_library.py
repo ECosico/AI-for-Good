@@ -32,3 +32,31 @@ def naive_bayes(table, evidence_row, target):
   compute_probs(neg,pos)
   #return your 2 results in a list
   return compute_probs(neg,pos)
+  
+def metrics(zipped_list):
+  #asserts here
+  assert isinstance(zipped_list, list), "Parameter must be a list."
+  assert all([isinstance(x, list) for x in zipped_list]), "Parameter must be a list of lists."
+  assert all([len(x) == 2 for x in zipped_list]), "Parameter must be a zipped list"
+  assert all([x >= 0 and y >= 0 for x,y in zipped_list]), "A value in the pair is negative"
+  assert all([isinstance(x, int) and isinstance(y, int) for x,y in zipped_list]), "Each value in the pair must be an int"
+
+  #body of function below
+  #first compute the sum of all 4 cases. See code above
+  tn = sum([1 if pair==[0,0] else 0 for pair in zipped_list])
+  tp = sum([1 if pair==[1,1] else 0 for pair in zipped_list])
+  fp = sum([1 if pair==[1,0] else 0 for pair in zipped_list])
+  fn = sum([1 if pair==[0,1] else 0 for pair in zipped_list])
+
+
+  #now can compute precicision, recall, f1, accuracy. Watch for divide by 0.
+  precision = tp/(tp+fp) if tp+fp != 0 else 0
+  recall = tp/(tp+fn) if tp+fn != 0 else 0
+  f1 = 2*(precision*recall)/(precision+recall) if precision+recall != 0 else 0
+  accuracy = sum ([1 if pair[0]==pair[1] else 0 for pair in zipped_list])/len(zipped_list)
+
+  #now build dictionary with the 4 measures
+  print_dict = {'Precision': precision,'Recall': recall,'F1': f1,'Accuracy': accuracy}
+  #finally, return the dictionary
+  return print_dict
+
