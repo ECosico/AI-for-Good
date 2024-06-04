@@ -39,7 +39,11 @@ def metrics(zipped_list):
   assert all([isinstance(x, list) for x in zipped_list]), "Parameter must be a list of lists."
   assert all([len(x) == 2 for x in zipped_list]), "Parameter must be a zipped list"
   assert all([x >= 0 and y >= 0 for x,y in zipped_list]), "A value in the pair is negative"
-  assert all([isinstance(x, int) and isinstance(y, int) for x,y in zipped_list]), "Each value in the pair must be an int"
+  for a,b in zipped_list:
+   assert isinstance(a,(int,float)) and isinstance(b,(int,float)), f'zipped_list contains a non-int or non-float pair: {[a,b]}'
+  for a,b in zipped_list:
+   assert float(a) in [0.0,1.0] and float(b) in [0.0,1.0], f'zipped_list contains a non-binary pair: {[a,b]}'
+
 
   #body of function below
   #first compute the sum of all 4 cases. See code above
